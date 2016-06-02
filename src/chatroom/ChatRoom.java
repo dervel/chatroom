@@ -2,8 +2,6 @@ package chatroom;
 
 public class ChatRoom {
 	
-	//topkek
-	
 	public static MainController controller;
 	
 	public static void main(String args[]){
