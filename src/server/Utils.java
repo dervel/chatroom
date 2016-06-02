@@ -12,6 +12,10 @@ public class Utils {
 		return new String("(IP:"+s.getInetAddress().toString()+")");
 	}
 	
+	public static String reportName(String name){
+		return new String("(Name:"+name+")");
+	}
+	
 	
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
 	public static Connection getConnection(){

@@ -33,16 +33,18 @@ public class PacketController {
 						} catch (InterruptedException e) {
 							//Do nothing
 						}
-	
+						
 						if (is.available() == 0)
-							return;
+							continue;
+						
+						System.out.println("New Data:"+is.available());
 	
 						int data_length = is.read(data, position, is.available());
 						position += data_length;
 						
 						if(packet_length == 0 && position > 2){
-							packet_length = data[1] << 8;
-							packet_length += data[0];
+							packet_length = (data[1] << 8) & 0xFF;
+							packet_length += data[0] & 0xFF;
 						}
 						
 						if(packet_length!=0 && position >= data_length){
@@ -55,10 +57,12 @@ public class PacketController {
 								packet_length = 0;
 							}
 							
+							System.out.println("Packet Complete");
 							parent.handle_packet(temp);
 						}
 					}
 				}catch(IOException e){
+					e.printStackTrace();
 					parent.restartConnection();
 				}
 			}

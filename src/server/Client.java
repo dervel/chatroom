@@ -1,10 +1,12 @@
 package server;
 
+import java.io.IOException;
 import java.net.Socket;
 
+import chatroom.ChatRoom;
+import chatroom.Config;
 import net.GenericNetClient;
 import net.PacketController;
-import packets.ServerPacketController;
 
 public class Client implements GenericNetClient{
 	
@@ -21,9 +23,22 @@ public class Client implements GenericNetClient{
 	public Client(Socket s){
 		isAlive = true;
 		this.s = s;
-		serverPacketFactory = new ServerPacketFactory();
+		serverPacketFactory = new ServerPacketFactory(this);
 		packetController = new PacketController(this);
 		packetController.start();
+		
+		try{
+			setInitPacket();
+		}catch(IOException e){
+			ChatRoom.getController().getLocalServer().getServerLog().log(
+					"Error trying to sent initial packet."+Utils.reportIP(s)
+			);
+		}
+	}
+	
+	public void setInitPacket() throws IOException{
+		serverPacketFactory.appendInitPacket(Config.GENSALT_WORKLOAD);
+		serverPacketFactory.sendPacket();
 	}
 	
 	public Socket getSocket(){

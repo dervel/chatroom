@@ -107,8 +107,7 @@ public class MainFrame extends JFrame {
 		try {
 			ChatRoom.getController().getLocalServer().stop();
 		} catch (IOException | NotRunningException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
 		}
 	}
 	

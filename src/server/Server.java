@@ -23,13 +23,13 @@ public class Server {
 		if(cc == null)
 			cc = new ConnectionController(port,this);
 		cc.startAcceptingConnections();
-		log.log("Server Started running at port "+port+"\n");
+		log.log("Server Started running at port "+port);
 	}
 	
 	public void stop() throws IOException, NotRunningException{
 		if(cc == null) return;
 		cc.stopAcceptingConnections();
-		log.log("Server has stopped\n");
+		log.log("Server has stopped");
 	}
 	
 	public void newConnection(Socket s){
@@ -72,7 +72,7 @@ public class Server {
 			rooms.put(room_id, newRoom);
 			return true;
 		} catch (SQLException e) {
-			log.log("Could not create new room. Reason:"+e.getMessage()+"\n");
+			log.log("Could not create new room. Reason:"+e.getMessage());
 			return false;
 		}
 		

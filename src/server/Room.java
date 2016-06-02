@@ -38,7 +38,7 @@ public class Room {
 		for(Client c : members){
 			try {
 				c.getPacketFactory().appendSendMessage(msg);
-				c.getPacketFactory().sendPacket(c.getSocket());
+				c.getPacketFactory().sendPacket();
 			} catch (IOException e) {
 				log.log("Could not send message to "+Utils.reportIP(c.getSocket()));
 			}

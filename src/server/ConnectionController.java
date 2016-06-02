@@ -38,6 +38,7 @@ public class ConnectionController {
 				while(running){
 					try {
 						Socket newClientSocket = ss.accept();
+						System.out.println("New:"+newClientSocket.getLocalPort()+":"+newClientSocket.getPort());
 						parent.newConnection(newClientSocket);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block

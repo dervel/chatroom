@@ -1,12 +1,14 @@
 package chatroom;
 
 import java.awt.BorderLayout;
-import java.util.Iterator;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
+
+import server.ServerLog;
+
 import javax.swing.JTextArea;
 
 public class ServerLogFrame extends JFrame {
@@ -56,11 +58,23 @@ public class ServerLogFrame extends JFrame {
 	}
 	
 	private void generateLogText(){
-		Iterator<String> log = ChatRoom.getController().getLocalServer().getServerLog().getAllMessages();
-		log.
-		while(log.hasNext()){
-			textArea.append(log.next()+"\n");
+		ServerLog log = ChatRoom.getController().getLocalServer().getServerLog();
+		
+		int logCounter = log.getCounter();
+		
+		if(logCounter <= Config.SERVER_LOG_SIZE){
+			for(int i=counter; i<logCounter;i++){
+				textArea.append(log.getMessageAt(i)+"\n");
+			}
+		}else{
+			int newMessages = logCounter - counter;
+			
+			for(int i=Config.SERVER_LOG_SIZE - newMessages; i< Config.SERVER_LOG_SIZE;i++){
+				textArea.append(log.getMessageAt(i)+"\n");
+			}
 		}
+		
+		counter = logCounter;
 	}
 
 }
