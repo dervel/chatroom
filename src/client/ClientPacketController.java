@@ -35,12 +35,17 @@ public class ClientPacketController extends IncomingPacket{
 	}
 	
 	private void Init(){
+		String serverName = readString();
 		
-		try {
-			parent.sendAuthenticationPacket();
-		} catch (IOException e) {
-			e.printStackTrace();
-			parent.restartConnection();
+		parent.setServerName(serverName);
+		
+		if(parent.isAutoconnect()){
+			try {
+				parent.sendAuthenticationPacket();
+			} catch (IOException e) {
+				e.printStackTrace();
+				parent.restartConnection();
+			}
 		}
 	}
 }

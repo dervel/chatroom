@@ -26,6 +26,7 @@ public class HostServerFrame extends JFrame {
 	private JTextField portField;
 	private JSeparator separator;
 	private JTextArea hostServerLog;
+	private JTextField nameField;
 
 	/**
 	 * Create the frame.
@@ -85,6 +86,16 @@ public class HostServerFrame extends JFrame {
 		});
 		btnClear.setBounds(335, 257, 89, 23);
 		contentPane.add(btnClear);
+		
+		JLabel lblName = new JLabel("Name:");
+		lblName.setBounds(134, 10, 31, 14);
+		contentPane.add(lblName);
+		
+		nameField = new JTextField();
+		nameField.setText("Magic");
+		nameField.setBounds(175, 7, 86, 20);
+		contentPane.add(nameField);
+		nameField.setColumns(10);
 	}
 	
 	public void start(){
@@ -99,7 +110,12 @@ public class HostServerFrame extends JFrame {
 				return;
 			}
 			
-			ChatRoom.getController().getLocalServer().start(port);
+			if(nameField.getText().length() == 0){
+				hostServerLog.append("Server name cannot be empty");
+				return;
+			}
+			
+			ChatRoom.getController().getLocalServer().start(port,nameField.getText());
 			hostServerLog.append("\n\nServer started successfully");
 		}catch (NumberFormatException e){
 			hostServerLog.append("\n\nCould not parse port number.");

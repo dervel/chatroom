@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.Socket;
 
 import chatroom.ChatRoom;
-import chatroom.Config;
 import net.GenericNetClient;
 import net.PacketController;
 
@@ -37,7 +36,7 @@ public class Client implements GenericNetClient{
 	}
 	
 	public void setInitPacket() throws IOException{
-		serverPacketFactory.appendInitPacket(Config.GENSALT_WORKLOAD);
+		serverPacketFactory.appendInitPacket(ChatRoom.getController().getLocalServer().getServerName());
 		serverPacketFactory.sendPacket();
 	}
 	

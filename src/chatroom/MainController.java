@@ -1,7 +1,6 @@
 package chatroom;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import client.ServerConnection;
@@ -24,8 +23,12 @@ public class MainController {
 		joinedServers.add(newConnection);
 	}
 	
-	public Iterator<ServerConnection> getAllServerConnections(){
-		return joinedServers.iterator();
+	public ServerConnection getElementAt(int index){
+		return joinedServers.get(index);
+	}
+	
+	public int getConecctedServersCount(){
+		return joinedServers.size();
 	}
 	
 }

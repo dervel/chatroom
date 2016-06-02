@@ -9,8 +9,9 @@ public class ServerPacketFactory extends PacketFactory{
 		super(parent);
 	}
 
-	public void appendInitPacket(int hash_workload){
+	public void appendInitPacket(String serverName){
 		packet.writeByte(0x00);
+		packet.writeString(serverName);
 	}
 	
 	public void appendSendMessage(Message msg){

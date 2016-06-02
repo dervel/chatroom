@@ -15,18 +15,26 @@ public class ServerConnection implements GenericNetClient{
 	private boolean isAlive;
 	private String name;
 	private String pass;
+	private String serverName;
+	private boolean autoconnect;
+	private boolean hasConnected = false;
 	
-	public ServerConnection(String ip, int port,String name, String pass){
+	public ServerConnection(String ip, int port,boolean autoconnect){
 		this.serverIP = ip;
 		this.serverPort = port;
-		this.name = name;
-		this.pass = pass;
 		packetFactory = new ClientPacketFactory(this);
+		this.autoconnect = autoconnect;
+	}
+	
+	public void setCredentials(String name,String password){
+		this.name = name;
+		this.pass = password;
 	}
 	
 	public void sendAuthenticationPacket() throws IOException{
 		packetFactory.appendAuthenticationTV(name,pass);
 		packetFactory.sendPacket();
+		hasConnected = true;
 	}
 	
 	public void connect() throws IOException{
@@ -69,5 +77,23 @@ public class ServerConnection implements GenericNetClient{
 	public ClientPacketFactory getClientPacketFactory(){
 		return packetFactory;
 	}
+
+	public String getServerName() {
+		return serverName;
+	}
+
+	public void setServerName(String serverName) {
+		this.serverName = serverName;
+	}
+
+	public boolean isAutoconnect() {
+		return autoconnect;
+	}
+
+	public boolean hasConnected() {
+		return hasConnected;
+	}
+	
+	
 	
 }

@@ -28,6 +28,8 @@ public class MainFrame extends JFrame {
 	private HostServerFrame hostServerFrame = null;
 	private JoinServerFrame joinServerFrame = null;
 	private ServerLogFrame serverLogFrame = null;
+	private RegisterUserFrame registerUserFrame = null;
+	
 
 	/**
 	 * Create the frame.
@@ -82,6 +84,19 @@ public class MainFrame extends JFrame {
 			}
 		});
 		mnServer.add(mntmServerLog);
+		
+		JMenu mnMore = new JMenu("More");
+		menuBar.add(mnMore);
+		
+		JMenuItem mntmRegisteratserver = new JMenuItem("RegisterAtServer");
+		mntmRegisteratserver.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(registerUserFrame == null)
+					registerUserFrame = new RegisterUserFrame();
+				registerUserFrame.setVisible(true);
+			}
+		});
+		mnMore.add(mntmRegisteratserver);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -102,6 +117,8 @@ public class MainFrame extends JFrame {
 			joinServerFrame.dispose();
 		if(serverLogFrame != null)
 			serverLogFrame.dispose();
+		if(registerUserFrame != null)
+			registerUserFrame.dispose();
 		
 		//Close Server if hosting
 		try {

@@ -65,7 +65,7 @@ public class JoinServerFrame extends JFrame {
 		JButton btnJoin = new JButton("Join");
 		btnJoin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				join();
+				join(false);
 			}
 		});
 		btnJoin.setBounds(335, 7, 89, 23);
@@ -98,9 +98,18 @@ public class JoinServerFrame extends JFrame {
 		passField = new JPasswordField();
 		passField.setBounds(210, 33, 109, 20);
 		contentPane.add(passField);
+		
+		JButton btnNewButton = new JButton("Connect as");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				join(true);
+			}
+		});
+		btnNewButton.setBounds(335, 32, 89, 23);
+		contentPane.add(btnNewButton);
 	}
 	
-	public void join(){
+	public void join(boolean autoconnect){
 		try {
 			if(portField.getText().length() == 0){
 				joinServerLog.append("\n\nPort Field can't be empty");
@@ -115,11 +124,12 @@ public class JoinServerFrame extends JFrame {
 			ServerConnection newServerConnection = new ServerConnection(
 					ipField.getText(), 
 					Integer.parseInt(portField.getText()),
-					nameField.getText(),
-					new String(passField.getPassword())
+					autoconnect
 			);
+			newServerConnection.setCredentials(nameField.getText(), new String(passField.getPassword()));
 			joinServerLog.append("\n\nAttempting to connect to server.");
 			newServerConnection.connect();
+			ChatRoom.getController().addServerConnection(newServerConnection);
 			joinServerLog.append("\n\nConnected to server sucessfully.");
 		} catch (IOException e) {
 			joinServerLog.append("\n\nGenertic Error:"+e.getMessage());

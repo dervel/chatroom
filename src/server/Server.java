@@ -18,11 +18,13 @@ public class Server {
 	private List<Client> clients = new ArrayList<Client>(Config.CLIENT_SIZE_ARRAY);
 	private Hashtable<Long,Room> rooms = new Hashtable<Long,Room>(Config.INITIAL_MEMBERS_PROOM);
 	private ServerLog log = new ServerLog();
+	private String name;
 	
-	public void start(int port) throws IOException, AlreadyRunningException{
+	public void start(int port,String name) throws IOException, AlreadyRunningException{
 		if(cc == null)
 			cc = new ConnectionController(port,this);
 		cc.startAcceptingConnections();
+		this.name = name;
 		log.log("Server Started running at port "+port);
 	}
 	
@@ -50,6 +52,10 @@ public class Server {
 	
 	public ServerLog getServerLog(){
 		return log;
+	}
+	
+	public String getServerName(){
+		return name;
 	}
 	
 	public boolean createNewRoom(String roomName, Client creator){
