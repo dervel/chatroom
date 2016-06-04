@@ -4,12 +4,13 @@ import java.io.IOException;
 import java.net.Socket;
 
 import net.GenericNetClient;
-import net.PacketController;
+import net.PacketListenerThread;
 
 public class ServerConnection implements GenericNetClient{
 	private Socket server = null;
-	private PacketController packetListener;
+	private PacketListenerThread packetListener;
 	private ClientPacketFactory packetFactory;
+	private ClientPacketController packetController;
 	private String serverIP;
 	private int serverPort;
 	private boolean isAlive;
@@ -23,6 +24,7 @@ public class ServerConnection implements GenericNetClient{
 		this.serverIP = ip;
 		this.serverPort = port;
 		packetFactory = new ClientPacketFactory(this);
+		packetController = new ClientPacketController(this);
 		this.autoconnect = autoconnect;
 	}
 	
@@ -49,7 +51,7 @@ public class ServerConnection implements GenericNetClient{
 		isAlive = true;
 		server = new Socket(serverIP,serverPort);
 		//server.connect(new InetSocketAddress(serverIP,serverPort), Config.CONNECT_WAITOUT);
-		packetListener = new PacketController(this);
+		packetListener = new PacketListenerThread(this);
 		packetListener.start();
 	}
 
@@ -65,8 +67,7 @@ public class ServerConnection implements GenericNetClient{
 
 	@Override
 	public void handle_packet(byte[] data) {
-		ClientPacketController newPacket = new ClientPacketController(data, this);
-		newPacket.run();	
+		packetController.handlePacket(data);
 	}
 
 	@Override
@@ -92,6 +93,14 @@ public class ServerConnection implements GenericNetClient{
 
 	public boolean hasConnected() {
 		return hasConnected;
+	}
+	
+	public void addPacketListener(PacketListenerThread pl){
+		
+	}
+	
+	public void removePacketListener(PacketListenerThread pl){
+		
 	}
 	
 	

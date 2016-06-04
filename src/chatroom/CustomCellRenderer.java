@@ -19,14 +19,18 @@ public class CustomCellRenderer extends JLabel implements ListCellRenderer<Strin
 			boolean isSelected, boolean cellHasFocus) {
 		
 		this.setText(value);
+		this.setOpaque(true);
 		if(ChatRoom.getController().getElementAt(index).hasConnected()){
 			this.setForeground(Color.red);
 		}else{
-			this.setForeground(Color.green);
+			this.setForeground(new Color(0, 100, 0));
 		}
 		
-		if(isSelected)
-			this.setBackground(Color.darkGray);
+		if(isSelected){
+			this.setBackground(list.getSelectionBackground());
+		}else{
+			this.setBackground(list.getBackground());
+		}
 		
 		return this;
 	}

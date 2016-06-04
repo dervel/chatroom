@@ -14,4 +14,10 @@ public class ClientPacketFactory extends PacketFactory{
 		packet.writeString(name);
 		packet.writeString(password);
 	}
+	
+	public void appendRegisterTV(String name, String password){
+		packet.writeByte(0x02);
+		packet.writeString(name);
+		packet.writeString(password);
+	}
 }

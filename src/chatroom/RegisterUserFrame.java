@@ -3,6 +3,10 @@ package chatroom;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import client.ClientPacketFactory;
+import client.ServerConnection;
+
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
@@ -14,7 +18,9 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowFocusListener;
+import java.io.IOException;
 import java.awt.event.WindowEvent;
+import java.awt.Color;
 
 public class RegisterUserFrame extends JFrame {
 
@@ -78,7 +84,7 @@ public class RegisterUserFrame extends JFrame {
 		contentPane.add(lblConfirmPassword);
 		
 		list = new JList<String>();
-		list.setBounds(252, 11, 172, 239);
+		list.setBounds(252, 11, 172, 201);
 		model = new DefaultListModel<String>();
 		list.setModel(model);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -93,10 +99,37 @@ public class RegisterUserFrame extends JFrame {
 		JButton btnNewButton = new JButton("Register");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				String pass = new String(passwordField.getPassword());
+				String pass1 = new String(confirmField.getPassword());
+				if(!pass.equals(pass1)){
+					reportArea.append("\n\n Passwords do not match.");
+				}
+				
+				
+				try {
+					int serverIndex = list.getSelectedIndex();
+					ServerConnection sc = ChatRoom.getController().getElementAt(serverIndex);
+					ClientPacketFactory factory = sc.getClientPacketFactory();
+					factory.appendRegisterTV(nameField.getText(),pass);
+					factory.sendPacket();
+					//TODO: report status of registration
+				} catch (IOException e) {
+					reportArea.append("\n\n Error sending packet "+e.getMessage());
+				}
 			}
 		});
 		btnNewButton.setBounds(153, 89, 89, 23);
 		contentPane.add(btnNewButton);
+		
+		JLabel lblConnectedCantRegister = new JLabel("Connected can't register");
+		lblConnectedCantRegister.setForeground(Color.RED);
+		lblConnectedCantRegister.setBounds(252, 236, 174, 14);
+		contentPane.add(lblConnectedCantRegister);
+		
+		JLabel lblNotConnectedCan = new JLabel("Not connected can Register");
+		lblNotConnectedCan.setForeground(new Color(0, 100, 0));
+		lblNotConnectedCan.setBounds(252, 219, 172, 14);
+		contentPane.add(lblNotConnectedCan);
 	}
 	
 	public void repaintList(){

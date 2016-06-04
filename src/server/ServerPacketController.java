@@ -8,20 +8,21 @@ import java.sql.SQLException;
 import org.mindrot.jbcrypt.BCrypt;
 
 import chatroom.ChatRoom;
-import packets.IncomingPacket;
+import net.packet.server.ServerTV;
+import packets.IncomingPacketController;
 
-public class ServerPacketController extends IncomingPacket{
+public class ServerPacketController extends IncomingPacketController<ServerTV>{
 
 	private Client parent;
 	private ServerLog log = ChatRoom.getController().getLocalServer().getServerLog();
 	
-	public ServerPacketController(byte[] data, Client parent) {
-		super(data);
+	public ServerPacketController(Client parent) {
 		this.parent = parent;
 	}
-
+	
 	@Override
-	public void implement() {
+	protected void read() {
+		// TODO Auto-generated method stub
 		
 	}
 
