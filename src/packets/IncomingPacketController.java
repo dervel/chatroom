@@ -7,7 +7,7 @@ import java.util.List;
 import client.PacketListener;
 import net.packet.PacketData;
 
-public abstract class IncomingPacketController<TV> {
+public abstract class IncomingPacketController<TV> implements ReadablePacket{
 	
 	protected byte[] data;
 	protected int position = 2;
@@ -15,7 +15,7 @@ public abstract class IncomingPacketController<TV> {
 	private List<PacketListener<TV>> listeners = new ArrayList<PacketListener<TV>>();
 	protected PacketData<TV> packet;
 	
-	protected String readString(){
+	public String readString(){
 		int length = readShort();
 		
 		byte[] temp = new byte[length*2];
@@ -26,7 +26,7 @@ public abstract class IncomingPacketController<TV> {
 		return new String(temp, StandardCharsets.UTF_16LE);
 	}
 	
-	protected int readShort(){
+	public int readShort(){
 		int length;
 		length = data[position++];
 		length += (data[position++] << 8);
@@ -34,7 +34,7 @@ public abstract class IncomingPacketController<TV> {
 		return length;
 	}
 	
-	protected byte readByte(){
+	public byte readByte(){
 		byte length;
 		length = data[position++];
 

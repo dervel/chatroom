@@ -1,14 +1,10 @@
 package net.packet.server;
 
+import chatroom.ChatRoom;
 import net.packet.TV;
 import server.Client;
+import server.ServerLog;
 
-public class ServerTV extends TV<Client>{
-
-	@Override
-	public void run(Client parent) {
-		// TODO Auto-generated method stub
-		
-	}
-
+public abstract class ServerTV extends TV<Client>{
+	public ServerLog log = ChatRoom.getController().getLocalServer().getServerLog();
 }

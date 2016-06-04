@@ -1,20 +1,20 @@
-package net.packet.client;
+package net.packet.server;
 
-import client.ServerConnection;
 import packets.ReadablePacket;
+import server.Client;
 
-public class RegisterSuccessTV extends ClientTV{
-	
+public class JoinRoomTV extends ServerTV {
+
 	@Override
 	public void read(ReadablePacket controller) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	public void run(ServerConnection parent) {
+	public void run(Client parent) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

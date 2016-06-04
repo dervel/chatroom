@@ -1,8 +1,7 @@
 package client;
 
-import java.io.IOException;
-
 import net.packet.client.ClientTV;
+import net.packet.client.InitTV;
 import packets.IncomingPacketController;
 
 public class ClientPacketController extends IncomingPacketController<ClientTV>{
@@ -17,13 +16,17 @@ public class ClientPacketController extends IncomingPacketController<ClientTV>{
 	protected void read() {
 		while(position < data.length){
 			//TV - Type Value
-			short type = readByte();
+			byte type = readByte();
 			System.out.println("Client Packet Type:"+type);
+			ClientTV tv= null;
 			switch(type){
 			case 0x00:
-				Init();
+				tv = new InitTV();
 				break;
 			}
+			
+			tv.read(this);
+			this.packet.data.add(tv);
 		}
 		
 	}
@@ -32,32 +35,6 @@ public class ClientPacketController extends IncomingPacketController<ClientTV>{
 	public void run() {
 		for(ClientTV tv : packet.data){
 			tv.run(parent);
-		}
-		while(position < data.length){
-			//TV - Type Value
-			short type = readByte();
-			System.out.println("Client Packet Type:"+type);
-			switch(type){
-			case 0x00:
-				Init();
-				break;
-			}
-		}
-		
-	}
-	
-	private void Init(){
-		String serverName = readString();
-		
-		parent.setServerName(serverName);
-		
-		if(parent.isAutoconnect()){
-			try {
-				parent.sendAuthenticationPacket();
-			} catch (IOException e) {
-				e.printStackTrace();
-				parent.restartConnection();
-			}
 		}
 	}
 }
