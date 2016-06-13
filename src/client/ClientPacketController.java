@@ -1,10 +1,10 @@
 package client;
 
-import net.packet.client.ClientTV;
+import net.packet.TV;
 import net.packet.client.InitTV;
 import packets.IncomingPacketController;
 
-public class ClientPacketController extends IncomingPacketController<ClientTV>{
+public class ClientPacketController extends IncomingPacketController<ServerConnection>{
 	
 	private ServerConnection parent;
 	
@@ -18,7 +18,7 @@ public class ClientPacketController extends IncomingPacketController<ClientTV>{
 			//TV - Type Value
 			byte type = readByte();
 			System.out.println("Client Packet Type:"+type);
-			ClientTV tv= null;
+			TV<ServerConnection> tv= null;
 			switch(type){
 			case 0x00:
 				tv = new InitTV();
@@ -33,7 +33,7 @@ public class ClientPacketController extends IncomingPacketController<ClientTV>{
 
 	@Override
 	public void run() {
-		for(ClientTV tv : packet.data){
+		for(TV<ServerConnection> tv : packet.data){
 			tv.run(parent);
 		}
 	}

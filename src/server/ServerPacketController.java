@@ -1,14 +1,14 @@
 package server;
 
+import net.packet.TV;
 import net.packet.server.AuthenticationTV;
 import net.packet.server.CreateRoomTV;
 import net.packet.server.JoinRoomTV;
 import net.packet.server.RegisterNewUserTV;
 import net.packet.server.RenameRoomTV;
-import net.packet.server.ServerTV;
 import packets.IncomingPacketController;
 
-public class ServerPacketController extends IncomingPacketController<ServerTV>{
+public class ServerPacketController extends IncomingPacketController<Client>{
 
 	private Client parent;
 	
@@ -22,7 +22,7 @@ public class ServerPacketController extends IncomingPacketController<ServerTV>{
 			//TV - Type Value
 			byte type = readByte();
 			System.out.println("Client Packet Type:"+type);
-			ServerTV tv= null;
+			TV<Client> tv= null;
 			switch(type){
 			case 0x01:
 				tv = new AuthenticationTV();
@@ -49,7 +49,7 @@ public class ServerPacketController extends IncomingPacketController<ServerTV>{
 	
 	@Override
 	public void run() {
-		for(ServerTV tv : packet.data){
+		for(TV<Client> tv : packet.data){
 			tv.run(parent);
 		}
 	}

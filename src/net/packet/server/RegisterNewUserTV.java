@@ -5,6 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.mindrot.jbcrypt.BCrypt;
+
+import chatroom.Config;
 import packets.ReadablePacket;
 import server.Client;
 import server.Utils;
@@ -12,12 +15,12 @@ import server.Utils;
 public class RegisterNewUserTV extends ServerTV {
 	
 	String name;
-	String hashed_pass;
+	String pass;
 
 	@Override
 	public void read(ReadablePacket controller) {
 		name = controller.readString();
-		hashed_pass = controller.readString();
+		pass = controller.readString();
 
 	}
 	
@@ -43,11 +46,12 @@ public class RegisterNewUserTV extends ServerTV {
 				return;
 			}
 			
-			PreparedStatement ps1 = con.prepareStatement("INSERT INTO users (name,pass) VALUES"+
+			String hashed_pass = BCrypt.hashpw(pass, BCrypt.gensalt(Config.GENSALT_WORKLOAD));
+			PreparedStatement ps1 = con.prepareStatement("INSERT INTO users (name,password) VALUES"+
 			" (?,?);");
 			ps1.setString(1, name);
 			ps1.setString(2, hashed_pass);
-			ps1.executeQuery();
+			ps1.executeUpdate();
 			
 			con.close();
 			

@@ -17,15 +17,13 @@ public class ServerConnection implements GenericNetClient{
 	private String name;
 	private String pass;
 	private String serverName;
-	private boolean autoconnect;
 	private boolean hasConnected = false;
 	
-	public ServerConnection(String ip, int port,boolean autoconnect){
+	public ServerConnection(String ip, int port){
 		this.serverIP = ip;
 		this.serverPort = port;
 		packetFactory = new ClientPacketFactory(this);
 		packetController = new ClientPacketController(this);
-		this.autoconnect = autoconnect;
 	}
 	
 	public void setCredentials(String name,String password){
@@ -36,7 +34,6 @@ public class ServerConnection implements GenericNetClient{
 	public void sendAuthenticationPacket() throws IOException{
 		packetFactory.appendAuthenticationTV(name,pass);
 		packetFactory.sendPacket();
-		hasConnected = true;
 	}
 	
 	public void connect() throws IOException{
@@ -53,6 +50,7 @@ public class ServerConnection implements GenericNetClient{
 		//server.connect(new InetSocketAddress(serverIP,serverPort), Config.CONNECT_WAITOUT);
 		packetListener = new PacketListenerThread(this);
 		packetListener.start();
+		hasConnected = true;
 	}
 
 	@Override
@@ -87,20 +85,16 @@ public class ServerConnection implements GenericNetClient{
 		this.serverName = serverName;
 	}
 
-	public boolean isAutoconnect() {
-		return autoconnect;
-	}
-
 	public boolean hasConnected() {
 		return hasConnected;
 	}
 	
-	public void addPacketListener(PacketListenerThread pl){
-		
+	public void addPacketListener(PacketListener<ServerConnection> pl){
+		packetController.addPacketListener(pl);
 	}
 	
-	public void removePacketListener(PacketListenerThread pl){
-		
+	public void removePacketListener(PacketListener<ServerConnection> pl){
+		packetController.removePacketListener(pl);
 	}
 	
 	

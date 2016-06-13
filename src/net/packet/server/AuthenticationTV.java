@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 import org.mindrot.jbcrypt.BCrypt;
 
+import chatroom.StatusReturnMessages;
 import packets.ReadablePacket;
 import server.Client;
 import server.Utils;
@@ -46,6 +47,7 @@ public class AuthenticationTV extends ServerTV {
 			con.close();
 			
 			if(!BCrypt.checkpw(pass, stored_hash)){
+				parent.getPacketFactory().appendReturnStatusTV(StatusReturnMessages.AUTH_FAILED);
 				log.log("Wrong Password by "+Utils.reportIP(parent.getSocket()));
 				return;
 			}
@@ -54,8 +56,10 @@ public class AuthenticationTV extends ServerTV {
 			parent.setAsAuthenticated();
 			log.log("New user named "+parent.getName()+" connected. IP:"+
 			parent.getSocket().getInetAddress().toString());
+			parent.getPacketFactory().appendReturnStatusTV(StatusReturnMessages.AUTH_SUCCESS);
 			
 		} catch (SQLException e) {
+			parent.getPacketFactory().appendReturnStatusTV(StatusReturnMessages.AUTH_FAILED);
 			log.log("Smth went horribly wrong. Error:"+e.getMessage());
 			try {
 				con.close();

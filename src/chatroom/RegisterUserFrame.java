@@ -4,9 +4,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import client.ClientPacketFactory;
-import client.ServerConnection;
-
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
@@ -18,7 +15,6 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowFocusListener;
-import java.io.IOException;
 import java.awt.event.WindowEvent;
 import java.awt.Color;
 
@@ -99,23 +95,7 @@ public class RegisterUserFrame extends JFrame {
 		JButton btnNewButton = new JButton("Register");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String pass = new String(passwordField.getPassword());
-				String pass1 = new String(confirmField.getPassword());
-				if(!pass.equals(pass1)){
-					reportArea.append("\n\n Passwords do not match.");
-				}
 				
-				
-				try {
-					int serverIndex = list.getSelectedIndex();
-					ServerConnection sc = ChatRoom.getController().getElementAt(serverIndex);
-					ClientPacketFactory factory = sc.getClientPacketFactory();
-					factory.appendRegisterTV(nameField.getText(),pass);
-					factory.sendPacket();
-					//TODO: report status of registration
-				} catch (IOException e) {
-					reportArea.append("\n\n Error sending packet "+e.getMessage());
-				}
 			}
 		});
 		btnNewButton.setBounds(153, 89, 89, 23);

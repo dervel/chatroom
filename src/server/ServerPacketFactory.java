@@ -1,5 +1,6 @@
 package server;
 
+import chatroom.StatusReturnMessages;
 import net.GenericNetClient;
 import net.PacketFactory;
 
@@ -14,13 +15,9 @@ public class ServerPacketFactory extends PacketFactory{
 		packet.writeString(serverName);
 	}
 	
-	public void appendRegisterSucessTV(){
+	public void appendReturnStatusTV(StatusReturnMessages status){
 		packet.writeByte(0x01);
-	}
-	
-	public void appendRegisterFailedTV(String reason){
-		packet.writeByte(0x02);
-		packet.writeString(reason);
+		packet.writeByte(status.getID());
 	}
 	
 	public void appendSendMessageTV(Message msg){
