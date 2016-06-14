@@ -13,7 +13,8 @@ public class ChatRoom {
 		//Load server configuration and start server if it should
 		try {
 			if(Config.loadServerConfig()){
-				ChatRoom.getController().getLocalServer().start();
+				if(Config.SERVER_AUTOSTART)
+					ChatRoom.getController().getLocalServer().start();
 			}
 			
 		} catch (IOException e) {
