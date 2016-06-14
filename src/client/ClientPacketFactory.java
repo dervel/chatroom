@@ -9,6 +9,11 @@ public class ClientPacketFactory extends PacketFactory{
 		super(parent);
 	}
 	
+	public void appendInitResponseTV(byte[] publicKeyBytes){
+		packet.writeByte(0x00);
+		packet.writeArray(publicKeyBytes);
+	}
+	
 	public void appendAuthenticationTV(String name, String password){
 		packet.writeByte(0x01);
 		packet.writeString(name);

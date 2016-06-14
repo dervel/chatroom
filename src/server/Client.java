@@ -2,10 +2,12 @@ package server;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.security.NoSuchAlgorithmException;
 
 import chatroom.ChatRoom;
 import net.GenericNetClient;
 import net.PacketListenerThread;
+import security.CryptController;
 
 public class Client implements GenericNetClient{
 	
@@ -19,6 +21,7 @@ public class Client implements GenericNetClient{
 	private PacketListenerThread packetListener;
 	private ServerPacketFactory serverPacketFactory;
 	private ServerPacketController packetController;
+	private CryptController crypt;
 	
 	public Client(Socket s){
 		isAlive = true;
@@ -27,6 +30,13 @@ public class Client implements GenericNetClient{
 		packetListener = new PacketListenerThread(this);
 		packetController = new ServerPacketController(this);
 		packetListener.start();
+		
+		try {
+			crypt = new CryptController();
+		} catch (NoSuchAlgorithmException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		try{
 			sendInitPacket();
@@ -38,7 +48,7 @@ public class Client implements GenericNetClient{
 	}
 	
 	public void sendInitPacket() throws IOException{
-		serverPacketFactory.appendInitTV(ChatRoom.getController().getLocalServer().getServerName());
+		serverPacketFactory.appendInitTV(ChatRoom.getController().getLocalServer().getServerName(),crypt.getPublicKeyAsArray());
 		serverPacketFactory.sendPacket();
 	}
 	
@@ -55,11 +65,17 @@ public class Client implements GenericNetClient{
 	}
 
 	public void handle_packet(byte[] packet_data) {
-		packetController.handlePacket(packet_data);
-		try{
+		byte[] buffer = new byte[packet_data.length];
+		try {
+			//Decrypt the data
+			buffer = crypt.decrypt(packet_data);
+			//Process the packet
+			packetController.handlePacket(buffer);
+			//Send any TV
 			serverPacketFactory.sendPacket();
-		}catch(IOException e){
+		} catch (Exception e) {
 			e.printStackTrace();
+			restartConnection();
 		}
 	}
 
@@ -92,5 +108,9 @@ public class Client implements GenericNetClient{
 	
 	public ServerPacketFactory getPacketFactory(){
 		return serverPacketFactory;
+	}
+	
+	public CryptController getCrypt(){
+		return crypt;
 	}
 }

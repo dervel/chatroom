@@ -10,9 +10,10 @@ public class ServerPacketFactory extends PacketFactory{
 		super(parent);
 	}
 
-	public void appendInitTV(String serverName){
+	public void appendInitTV(String serverName,byte[] publicKeyBytes){
 		packet.writeByte(0x00);
 		packet.writeString(serverName);
+		packet.writeArray(publicKeyBytes);
 	}
 	
 	public void appendReturnStatusTV(StatusReturnMessages status){

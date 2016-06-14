@@ -33,11 +33,25 @@ public class OutgoingPacket {
 		data[position++] = (byte)((l & 0xFF00000000000000L) >> 56);
 	}
 	
+	public void writeInt(int i){
+		data[position++] = (byte) (i & 0x00000000000000FFL);
+		data[position++] = (byte)((i & 0x000000000000FF00L) >> 8);
+		data[position++] = (byte)((i & 0x0000000000FF0000L) >> 16);
+		data[position++] = (byte)((i & 0x00000000FF000000L) >> 24);
+	}
+	
 	public void writeString(String s){
 		writeShort((short)s.length());
 		byte[] temp = s.getBytes(StandardCharsets.UTF_16LE);
 		System.arraycopy(temp, 0, data, position, (s.length())*2);
 		position += (s.length())*2;
+	}
+	
+	public void writeArray(byte[] array){
+		writeInt(array.length);
+		System.arraycopy(array, 0, data, position, array.length);
+		position += array.length;
+		
 	}
 	
 	public void writePacketLength(){

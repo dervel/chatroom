@@ -2,15 +2,19 @@ package client;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.security.NoSuchAlgorithmException;
 
 import net.GenericNetClient;
 import net.PacketListenerThread;
+import security.CryptController;
 
 public class ServerConnection implements GenericNetClient{
 	private Socket server = null;
 	private PacketListenerThread packetListener;
 	private ClientPacketFactory packetFactory;
 	private ClientPacketController packetController;
+	private CryptController crypt;
+	
 	private String serverIP;
 	private int serverPort;
 	private boolean isAlive;
@@ -24,6 +28,13 @@ public class ServerConnection implements GenericNetClient{
 		this.serverPort = port;
 		packetFactory = new ClientPacketFactory(this);
 		packetController = new ClientPacketController(this);
+		
+		try {
+			crypt = new CryptController();
+		} catch (NoSuchAlgorithmException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 	
 	public void setCredentials(String name,String password){
@@ -64,8 +75,20 @@ public class ServerConnection implements GenericNetClient{
 	}
 
 	@Override
-	public void handle_packet(byte[] data) {
-		packetController.handlePacket(data);
+	public void handle_packet(byte[] packet_data) {
+		byte[] buffer = new byte[packet_data.length];
+		try{
+			if(crypt.canEncrypt()){
+				buffer = crypt.decrypt(packet_data);
+			}else{
+				System.arraycopy(packet_data, 0, buffer, 0, packet_data.length);
+			}
+		}catch(Exception e){
+			System.arraycopy(packet_data, 0, buffer, 0, packet_data.length);
+			e.printStackTrace();
+		}
+		
+		packetController.handlePacket(buffer);
 		try {
 			this.packetFactory.sendPacket();
 		} catch (IOException e) {
@@ -103,6 +126,9 @@ public class ServerConnection implements GenericNetClient{
 		packetController.removePacketListener(pl);
 	}
 	
+	public CryptController getCrypt(){
+		return crypt;
+	}
 	
 	
 }

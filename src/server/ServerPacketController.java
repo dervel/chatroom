@@ -3,6 +3,7 @@ package server;
 import net.packet.TV;
 import net.packet.server.AuthenticationTV;
 import net.packet.server.CreateRoomTV;
+import net.packet.server.InitResponseTV;
 import net.packet.server.JoinRoomTV;
 import net.packet.server.RegisterNewUserTV;
 import net.packet.server.RenameRoomTV;
@@ -24,6 +25,9 @@ public class ServerPacketController extends IncomingPacketController<Client>{
 			System.out.println("Server Caught Packet Type:"+type);
 			TV<Client> tv= null;
 			switch(type){
+			case 0x00:
+				tv = new InitResponseTV();
+				break;
 			case 0x01:
 				tv = new AuthenticationTV();
 				break;

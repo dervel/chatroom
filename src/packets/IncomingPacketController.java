@@ -26,10 +26,28 @@ public abstract class IncomingPacketController<TV> implements ReadablePacket{
 		return new String(temp, StandardCharsets.UTF_16LE);
 	}
 	
+	public byte[] readArray(){
+		int length = readInt();
+		byte[] buffer = new byte[length];
+		System.arraycopy(data, position, buffer, 0, length);
+		position += length;
+		return buffer;
+	}
+	
 	public int readShort(){
 		int length;
 		length = data[position++];
 		length += (data[position++] << 8);
+
+		return length;
+	}
+	
+	public int readInt(){
+		int length;
+		length = data[position++];
+		length += (data[position++] << 8);
+		length += (data[position++] << 16);
+		length += (data[position++] << 24);
 
 		return length;
 	}
