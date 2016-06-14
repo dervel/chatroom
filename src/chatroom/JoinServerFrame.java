@@ -36,6 +36,7 @@ public class JoinServerFrame extends JFrame {
 	private JTextField regNameField;
 	private JPasswordField regPassField;
 	private JPasswordField regCnfField;
+	private JTabbedPane tabbedPane;
 	
 	private ServerConnection currentConnection;
 
@@ -90,8 +91,9 @@ public class JoinServerFrame extends JFrame {
 		scroll.setBounds(10, 176, 414, 116);
 		contentPane.add(scroll);
 		
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(10, 36, 414, 115);
+		tabbedPane.setVisible(false);
 		contentPane.add(tabbedPane);
 		
 		JPanel loginPanel = new JPanel();
@@ -222,7 +224,6 @@ public class JoinServerFrame extends JFrame {
 					ipField.getText(), 
 					Integer.parseInt(portField.getText())
 			);
-			currentConnection.setCredentials(nameField.getText(), new String(passField.getPassword()));
 			joinServerLog.append("\n\nAttempting to connect to server.");
 			
 			//Add the Listener
@@ -230,8 +231,9 @@ public class JoinServerFrame extends JFrame {
 
 				@Override
 				public void catchPacket(PacketData<ServerConnection> packet) {
-					if(packet.contains(1)){
-						joinServerLog.append("\n\n"+StatusReturnMessages.getMessage(packet.getStatusID()));
+					if(packet.contains(0x00)){
+						joinServerLog.append("\n\nConnected to server sucessfully.");
+						tabbedPane.setVisible(true);
 					}
 					
 				}
@@ -243,7 +245,6 @@ public class JoinServerFrame extends JFrame {
 			
 			//Add the server list
 			ChatRoom.getController().addServerConnection(currentConnection);
-			joinServerLog.append("\n\nConnected to server sucessfully.");
 		} catch (IOException e) {
 			joinServerLog.append("\n\nCould connect to server("+e.getMessage()+").");
 		}catch (NumberFormatException e){
@@ -254,6 +255,19 @@ public class JoinServerFrame extends JFrame {
 	
 	private void login(){
 		try {
+			//Add the Listener
+			currentConnection.addPacketListener( new PacketListener<ServerConnection>(){
+
+				@Override
+				public void catchPacket(PacketData<ServerConnection> packet) {
+					if(packet.contains(0x01)){
+						joinServerLog.append("\n\n"+StatusReturnMessages.getMessage(packet.getStatusID()));
+					}
+					
+				}
+				
+			});
+			currentConnection.setCredentials(nameField.getText(), new String(passField.getPassword()));
 			currentConnection.sendAuthenticationPacket();
 		} catch (IOException e) {
 			joinServerLog.append("\n\nCould login to server("+e.getMessage()+").");

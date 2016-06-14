@@ -2,6 +2,7 @@ package client;
 
 import net.packet.TV;
 import net.packet.client.InitTV;
+import net.packet.client.ReturnStatusTV;
 import packets.IncomingPacketController;
 
 public class ClientPacketController extends IncomingPacketController<ServerConnection>{
@@ -17,11 +18,14 @@ public class ClientPacketController extends IncomingPacketController<ServerConne
 		while(position < data.length){
 			//TV - Type Value
 			byte type = readByte();
-			System.out.println("Client Packet Type:"+type);
+			System.out.println("Client Caught Packet Type:"+type);
 			TV<ServerConnection> tv= null;
 			switch(type){
 			case 0x00:
 				tv = new InitTV();
+				break;
+			case 0x01:
+				tv = new ReturnStatusTV();
 				break;
 			}
 			
@@ -36,5 +40,6 @@ public class ClientPacketController extends IncomingPacketController<ServerConne
 		for(TV<ServerConnection> tv : packet.data){
 			tv.run(parent);
 		}
+		packet.data.clear();
 	}
 }

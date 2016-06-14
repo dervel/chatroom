@@ -7,7 +7,7 @@ import chatroom.Config;
 public class OutgoingPacket {
 	
 	private byte[] data = new byte[Config.PACKET_BUFFER_SIZE];
-	private int position = 0;
+	private int position = 2;
 	
 	public byte[] getData(){
 		return data;
@@ -47,5 +47,9 @@ public class OutgoingPacket {
 	
 	public int getPacketLength(){
 		return position;
+	}
+	
+	public void resetPacket(){
+		position = 2;
 	}
 }

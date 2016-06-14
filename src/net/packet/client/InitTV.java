@@ -8,6 +8,7 @@ public class InitTV extends ClientTV{
 	
 	@Override
 	public void read(ReadablePacket controller) {
+		this.opcode = 0x00;
 		serverName = controller.readString();
 		
 	}

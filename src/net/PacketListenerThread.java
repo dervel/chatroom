@@ -36,8 +36,6 @@ public class PacketListenerThread {
 						
 						if (is.available() == 0)
 							continue;
-						
-						System.out.println("New Data:"+is.available());
 	
 						int data_length = is.read(data, position, is.available());
 						position += data_length;
@@ -53,6 +51,9 @@ public class PacketListenerThread {
 							
 							if(position > packet_length){
 								System.arraycopy(data, packet_length, data, 0, position - packet_length);
+								position = position - packet_length;
+								packet_length = 0;
+							}else{
 								position = 0;
 								packet_length = 0;
 							}

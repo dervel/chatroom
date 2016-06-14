@@ -9,6 +9,7 @@ public class ReturnStatusTV extends ClientTV{
 
 	@Override
 	public void read(ReadablePacket controller) {
+		this.opcode = 0x01;
 		statusID = controller.readByte();
 		
 	}

@@ -21,7 +21,7 @@ public class ServerPacketController extends IncomingPacketController<Client>{
 		while(position < data.length){
 			//TV - Type Value
 			byte type = readByte();
-			System.out.println("Client Packet Type:"+type);
+			System.out.println("Server Caught Packet Type:"+type);
 			TV<Client> tv= null;
 			switch(type){
 			case 0x01:

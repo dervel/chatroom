@@ -5,7 +5,6 @@ import java.net.Socket;
 
 import chatroom.ChatRoom;
 import net.GenericNetClient;
-import net.PacketFactory;
 import net.PacketListenerThread;
 
 public class Client implements GenericNetClient{
@@ -57,10 +56,9 @@ public class Client implements GenericNetClient{
 
 	public void handle_packet(byte[] packet_data) {
 		packetController.handlePacket(packet_data);
-		try {
+		try{
 			serverPacketFactory.sendPacket();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		}catch(IOException e){
 			e.printStackTrace();
 		}
 	}

@@ -15,6 +15,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
+import javax.swing.JCheckBox;
 
 public class HostServerFrame extends JFrame {
 
@@ -47,7 +48,7 @@ public class HostServerFrame extends JFrame {
 		portField = new JTextField();
 		portField.setBounds(38, 7, 86, 20);
 		portField.setColumns(10);
-		portField.setText(String.valueOf(Config.DEFAULT_PORT));
+		portField.setText(String.valueOf(Config.SERVER_PORT));
 		contentPane.add(portField);
 		
 		separator = new JSeparator();
@@ -92,10 +93,15 @@ public class HostServerFrame extends JFrame {
 		contentPane.add(lblName);
 		
 		nameField = new JTextField();
-		nameField.setText("Magic");
+		nameField.setText(Config.SERVER_NAME);
 		nameField.setBounds(175, 7, 86, 20);
 		contentPane.add(nameField);
 		nameField.setColumns(10);
+		
+		JCheckBox chckbxAutoStart = new JCheckBox("Auto Start");
+		chckbxAutoStart.setSelected(Config.SERVER_AUTOSTART);
+		chckbxAutoStart.setBounds(10, 34, 97, 23);
+		contentPane.add(chckbxAutoStart);
 	}
 	
 	public void start(){
@@ -115,7 +121,9 @@ public class HostServerFrame extends JFrame {
 				return;
 			}
 			
-			ChatRoom.getController().getLocalServer().start(port,nameField.getText());
+			Config.SERVER_NAME = nameField.getText();
+			Config.SERVER_PORT = Integer.parseInt(portField.getText());
+			ChatRoom.getController().getLocalServer().start();
 			hostServerLog.append("\n\nServer started successfully");
 		}catch (NumberFormatException e){
 			hostServerLog.append("\n\nCould not parse port number.");

@@ -66,6 +66,12 @@ public class ServerConnection implements GenericNetClient{
 	@Override
 	public void handle_packet(byte[] data) {
 		packetController.handlePacket(data);
+		try {
+			this.packetFactory.sendPacket();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override

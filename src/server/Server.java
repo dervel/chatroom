@@ -20,12 +20,12 @@ public class Server {
 	private ServerLog log = new ServerLog();
 	private String name;
 	
-	public void start(int port,String name) throws IOException, AlreadyRunningException{
+	public void start() throws IOException, AlreadyRunningException{
 		if(cc == null)
-			cc = new ConnectionController(port,this);
+			cc = new ConnectionController(Config.SERVER_PORT,this);
 		cc.startAcceptingConnections();
-		this.name = name;
-		log.log("Server Started running at port "+port);
+		this.name = Config.SERVER_NAME;
+		log.log("Server Started running at port "+Config.SERVER_PORT);
 	}
 	
 	public void stop() throws IOException, NotRunningException{
