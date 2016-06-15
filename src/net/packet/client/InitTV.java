@@ -18,9 +18,13 @@ public class InitTV extends ClientTV{
 	@Override
 	public void run(ServerConnection parent) {
 		parent.setServerName(serverName);
-		parent.getCrypt().setRemotePublicKey(publicKeyBytes);
-		
-		parent.getClientPacketFactory().appendInitResponseTV(parent.getCrypt().getPublicKeyAsArray());
+		try{
+			byte[] encypted_key = parent.getCrypt().autoEncryptSymmetricKey(publicKeyBytes);
+			parent.getClientPacketFactory().appendInitResponseTV(encypted_key);
+		}catch(Exception e){
+			parent.restartConnection();
+			e.printStackTrace();
+		}
 		
 	}
 

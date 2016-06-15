@@ -15,7 +15,12 @@ public class InitResponseTV extends ServerTV{
 
 	@Override
 	public void run(Client parent) {
-		parent.getCrypt().setRemotePublicKey(publicKeyBytes);
+		try{
+			parent.getCrypt().autoDecryptSymmetricalKey(publicKeyBytes);
+		}catch(Exception e){
+			parent.restartConnection();
+			e.printStackTrace();
+		}
 		
 	}
 

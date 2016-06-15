@@ -34,10 +34,10 @@ public class OutgoingPacket {
 	}
 	
 	public void writeInt(int i){
-		data[position++] = (byte) (i & 0x00000000000000FFL);
-		data[position++] = (byte)((i & 0x000000000000FF00L) >> 8);
-		data[position++] = (byte)((i & 0x0000000000FF0000L) >> 16);
-		data[position++] = (byte)((i & 0x00000000FF000000L) >> 24);
+		data[position++] = (byte) (i & 0x000000FFL);
+		data[position++] = (byte)((i & 0x0000FF00L) >> 8);
+		data[position++] = (byte)((i & 0x00FF0000L) >> 16);
+		data[position++] = (byte)((i & 0xFF000000L) >> 24);
 	}
 	
 	public void writeString(String s){
@@ -49,6 +49,7 @@ public class OutgoingPacket {
 	
 	public void writeArray(byte[] array){
 		writeInt(array.length);
+		System.out.println(array.length);
 		System.arraycopy(array, 0, data, position, array.length);
 		position += array.length;
 		

@@ -44,10 +44,10 @@ public abstract class IncomingPacketController<TV> implements ReadablePacket{
 	
 	public int readInt(){
 		int length;
-		length = data[position++];
-		length += (data[position++] << 8);
-		length += (data[position++] << 16);
-		length += (data[position++] << 24);
+		length = data[position++] & 0xFF;
+		length += (data[position++] << 8) & 0xFF;
+		length += (data[position++] << 16)& 0xFF;
+		length += (data[position++] << 24)& 0xFF;
 
 		return length;
 	}

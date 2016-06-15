@@ -20,6 +20,9 @@ public class PacketFactory {
 		packet.writePacketLength();
 		
 		OutputStream os = parent.getSocket().getOutputStream();
+		//Overhaul needed, ecrypt packet data but not the length
+		//Add packet to start encrypting/decrypting
+		
 		os.write(packet.getData(), 0, packet.getPacketLength());
 		os.flush();
 		

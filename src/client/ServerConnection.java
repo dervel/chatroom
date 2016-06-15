@@ -78,7 +78,7 @@ public class ServerConnection implements GenericNetClient{
 	public void handle_packet(byte[] packet_data) {
 		byte[] buffer = new byte[packet_data.length];
 		try{
-			if(crypt.canEncrypt()){
+			if(crypt.cryptReady()){
 				buffer = crypt.decrypt(packet_data);
 			}else{
 				System.arraycopy(packet_data, 0, buffer, 0, packet_data.length);

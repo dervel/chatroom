@@ -1,6 +1,5 @@
 package server;
 
-import java.io.IOException;
 import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
 
@@ -40,15 +39,17 @@ public class Client implements GenericNetClient{
 		
 		try{
 			sendInitPacket();
-		}catch(IOException e){
+		}catch(Exception e){
 			ChatRoom.getController().getLocalServer().getServerLog().log(
 					"Error trying to sent initial packet."+Utils.reportIP(s)
 			);
 		}
 	}
 	
-	public void sendInitPacket() throws IOException{
-		serverPacketFactory.appendInitTV(ChatRoom.getController().getLocalServer().getServerName(),crypt.getPublicKeyAsArray());
+	public void sendInitPacket() throws Exception{
+		String serverName = ChatRoom.getController().getLocalServer().getServerName();
+		byte[] public_key = crypt.generateKey();
+		serverPacketFactory.appendInitTV(serverName,public_key);
 		serverPacketFactory.sendPacket();
 	}
 	
@@ -66,11 +67,20 @@ public class Client implements GenericNetClient{
 
 	public void handle_packet(byte[] packet_data) {
 		byte[] buffer = new byte[packet_data.length];
+		try{
+			if(crypt.cryptReady()){
+				buffer = crypt.decrypt(packet_data);
+			}else{
+				System.arraycopy(packet_data, 0, buffer, 0, packet_data.length);
+			}
+		}catch(Exception e){
+			System.arraycopy(packet_data, 0, buffer, 0, packet_data.length);
+			e.printStackTrace();
+		}
+		
+		packetController.handlePacket(buffer);
+
 		try {
-			//Decrypt the data
-			buffer = crypt.decrypt(packet_data);
-			//Process the packet
-			packetController.handlePacket(buffer);
 			//Send any TV
 			serverPacketFactory.sendPacket();
 		} catch (Exception e) {
