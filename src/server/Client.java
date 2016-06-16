@@ -43,6 +43,7 @@ public class Client implements GenericNetClient{
 			ChatRoom.getController().getLocalServer().getServerLog().log(
 					"Error trying to sent initial packet."+Utils.reportIP(s)
 			);
+			e.printStackTrace();
 		}
 	}
 	
@@ -69,6 +70,7 @@ public class Client implements GenericNetClient{
 		byte[] buffer = new byte[packet_data.length];
 		try{
 			if(crypt.cryptReady()){
+				System.out.println("Encrypted:"+new String(packet_data)+" L:"+packet_data.length);
 				buffer = crypt.decrypt(packet_data);
 			}else{
 				System.arraycopy(packet_data, 0, buffer, 0, packet_data.length);

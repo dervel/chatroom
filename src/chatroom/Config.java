@@ -7,7 +7,7 @@ import java.util.Properties;
 
 public class Config {
 	public static int DEFAULT_PORT = 1214;
-	public static final int PACKET_BUFFER_SIZE = 1000;
+	public static final int PACKET_BUFFER_SIZE = 3000;
 	public static final int INPUTSTREAM_WAIT = 100;
 	public static final int CONNECT_WAITOUT = 5000;
 	public static final int LOG_REFRESH_TIME = 1000;

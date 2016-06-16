@@ -42,7 +42,7 @@ public class ServerConnection implements GenericNetClient{
 		this.pass = password;
 	}
 	
-	public void sendAuthenticationPacket() throws IOException{
+	public void sendAuthenticationPacket() throws Exception{
 		packetFactory.appendAuthenticationTV(name,pass);
 		packetFactory.sendPacket();
 	}
@@ -91,7 +91,7 @@ public class ServerConnection implements GenericNetClient{
 		packetController.handlePacket(buffer);
 		try {
 			this.packetFactory.sendPacket();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

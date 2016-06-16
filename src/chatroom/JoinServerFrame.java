@@ -201,7 +201,7 @@ public class JoinServerFrame extends JFrame {
 			factory.appendRegisterTV(username,pass);
 			factory.sendPacket();
 			//TODO: report status of registration
-		} catch (IOException e) {
+		} catch (Exception e) {
 			joinServerLog.append("\n\n Error sending packet "+e.getMessage());
 		}
 	}
@@ -269,7 +269,7 @@ public class JoinServerFrame extends JFrame {
 			});
 			currentConnection.setCredentials(nameField.getText(), new String(passField.getPassword()));
 			currentConnection.sendAuthenticationPacket();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			joinServerLog.append("\n\nCould login to server("+e.getMessage()+").");
 		}
 	}

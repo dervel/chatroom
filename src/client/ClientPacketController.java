@@ -3,6 +3,7 @@ package client;
 import net.packet.TV;
 import net.packet.client.InitTV;
 import net.packet.client.ReturnStatusTV;
+import net.packet.client.StartCryptTV;
 import packets.IncomingPacketController;
 
 public class ClientPacketController extends IncomingPacketController<ServerConnection>{
@@ -27,7 +28,11 @@ public class ClientPacketController extends IncomingPacketController<ServerConne
 			case 0x01:
 				tv = new ReturnStatusTV();
 				break;
+			case 0x02:
+				tv = new StartCryptTV();
+				break;
 			}
+
 			
 			tv.read(this);
 			this.packet.data.add(tv);

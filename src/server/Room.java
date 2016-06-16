@@ -39,7 +39,7 @@ public class Room {
 			try {
 				c.getPacketFactory().appendSendMessageTV(msg);
 				c.getPacketFactory().sendPacket();
-			} catch (IOException e) {
+			} catch (Exception e) {
 				log.log("Could not send message to "+Utils.reportIP(c.getSocket()));
 			}
 		}

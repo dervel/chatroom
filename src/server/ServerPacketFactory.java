@@ -21,6 +21,10 @@ public class ServerPacketFactory extends PacketFactory{
 		packet.writeByte(status.getID());
 	}
 	
+	public void appendCryptStartTV(){
+		packet.writeByte(0x02);
+	}
+	
 	public void appendSendMessageTV(Message msg){
 		packet.writeByte(0x30);
 		packet.writeLong(msg.senderID);
