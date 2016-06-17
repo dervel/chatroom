@@ -2,7 +2,7 @@ package net.packet;
 
 import packets.ReadablePacket;
 
-public abstract class TV<E> {
+public abstract class Packet<E> {
 	public byte opcode;
 	//TypeValue
 	

@@ -1,6 +1,6 @@
 package server;
 
-import net.packet.TV;
+import net.packet.Packet;
 import net.packet.server.AuthenticationTV;
 import net.packet.server.CreateRoomTV;
 import net.packet.server.InitResponseTV;
@@ -19,42 +19,38 @@ public class ServerPacketController extends IncomingPacketController<Client>{
 	
 	@Override
 	protected void read() {
-		while(position < data.length){
-			//TV - Type Value
-			byte type = readByte();
-			System.out.println("Server Caught Packet Type:"+type);
-			TV<Client> tv= null;
-			switch(type){
-			case 0x00:
-				tv = new InitResponseTV();
-				break;
-			case 0x01:
-				tv = new AuthenticationTV();
-				break;
-			case 0x02:
-				tv = new RegisterNewUserTV();
-				break;
-			case 0x20:
-				tv = new CreateRoomTV();
-				break;
-			case 0x21:
-				tv = new JoinRoomTV();
-				break;
-			case 0x22:
-				tv = new RenameRoomTV();
-				break;
-			}
-			
-			tv.read(this);
-			this.packet.data.add(tv);
+		//TV - Type Value
+		byte type = readByte();
+		System.out.println("Server Caught Packet Type:"+type);
+		Packet<Client> tv= null;
+		switch(type){
+		case 0x00:
+			tv = new InitResponseTV();
+			break;
+		case 0x01:
+			tv = new AuthenticationTV();
+			break;
+		case 0x02:
+			tv = new RegisterNewUserTV();
+			break;
+		case 0x20:
+			tv = new CreateRoomTV();
+			break;
+		case 0x21:
+			tv = new JoinRoomTV();
+			break;
+		case 0x22:
+			tv = new RenameRoomTV();
+			break;
 		}
+			
+		tv.read(this);
+		this.packet = tv;
 		
 	}
 	
 	@Override
 	public void run() {
-		for(TV<Client> tv : packet.data){
-			tv.run(parent);
-		}
+		packet.run(parent);
 	}
 }

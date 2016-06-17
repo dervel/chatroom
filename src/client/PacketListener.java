@@ -1,7 +1,7 @@
 package client;
 
-import net.packet.PacketData;
+import net.packet.Packet;
 
 public interface PacketListener<E> {
-	public void catchPacket(PacketData<E> packet);
+	public void catchPacket(Packet<E> packet);
 }

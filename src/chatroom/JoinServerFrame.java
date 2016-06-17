@@ -8,7 +8,8 @@ import javax.swing.border.EmptyBorder;
 import client.ClientPacketFactory;
 import client.PacketListener;
 import client.ServerConnection;
-import net.packet.PacketData;
+import net.packet.Packet;
+import net.packet.client.ReturnStatusTV;
 
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -187,10 +188,9 @@ public class JoinServerFrame extends JFrame {
 			currentConnection.addPacketListener( new PacketListener<ServerConnection>(){
 
 				@Override
-				public void catchPacket(PacketData<ServerConnection> packet) {
-					if(packet.contains(1)){
-						System.out.println("TiggerFIRED");
-						joinServerLog.append("\n\n"+StatusReturnMessages.getMessage(packet.getStatusID()));
+				public void catchPacket(Packet<ServerConnection> packet) {
+					if(packet.opcode == 0x01){
+						joinServerLog.append("\n\n"+StatusReturnMessages.getMessage(((ReturnStatusTV)packet).statusID));
 					}
 					
 				}
@@ -230,8 +230,8 @@ public class JoinServerFrame extends JFrame {
 			currentConnection.addPacketListener( new PacketListener<ServerConnection>(){
 
 				@Override
-				public void catchPacket(PacketData<ServerConnection> packet) {
-					if(packet.contains(0x00)){
+				public void catchPacket(Packet<ServerConnection> packet) {
+					if(packet.opcode == 0x00){
 						joinServerLog.append("\n\nConnected to server sucessfully.");
 						tabbedPane.setVisible(true);
 					}
@@ -259,9 +259,9 @@ public class JoinServerFrame extends JFrame {
 			currentConnection.addPacketListener( new PacketListener<ServerConnection>(){
 
 				@Override
-				public void catchPacket(PacketData<ServerConnection> packet) {
-					if(packet.contains(0x01)){
-						joinServerLog.append("\n\n"+StatusReturnMessages.getMessage(packet.getStatusID()));
+				public void catchPacket(Packet<ServerConnection> packet) {
+					if(packet.opcode == 0x01){
+						joinServerLog.append("\n\n"+StatusReturnMessages.getMessage(((ReturnStatusTV)packet).statusID));
 					}
 					
 				}

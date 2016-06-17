@@ -1,8 +1,8 @@
 package net.packet.client;
 
 import client.ServerConnection;
-import net.packet.TV;
+import net.packet.Packet;
 
-public abstract class ClientTV extends TV<ServerConnection>{
+public abstract class ClientTV extends Packet<ServerConnection>{
 	
 }

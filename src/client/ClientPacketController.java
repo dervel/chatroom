@@ -1,6 +1,6 @@
 package client;
 
-import net.packet.TV;
+import net.packet.Packet;
 import net.packet.client.InitTV;
 import net.packet.client.ReturnStatusTV;
 import net.packet.client.StartCryptTV;
@@ -16,35 +16,29 @@ public class ClientPacketController extends IncomingPacketController<ServerConne
 	
 	@Override
 	protected void read() {
-		while(position < data.length){
-			//TV - Type Value
-			byte type = readByte();
-			System.out.println("Client Caught Packet Type:"+type);
-			TV<ServerConnection> tv= null;
-			switch(type){
-			case 0x00:
-				tv = new InitTV();
-				break;
-			case 0x01:
-				tv = new ReturnStatusTV();
-				break;
-			case 0x02:
-				tv = new StartCryptTV();
-				break;
-			}
-
-			
-			tv.read(this);
-			this.packet.data.add(tv);
+		//TV - Type Value
+		byte type = readByte();
+		System.out.println("Client Caught Packet Type:"+type);
+		Packet<ServerConnection> tv= null;
+		switch(type){
+		case 0x00:
+			tv = new InitTV();
+			break;
+		case 0x01:
+			tv = new ReturnStatusTV();
+			break;
+		case 0x02:
+			tv = new StartCryptTV();
+			break;
 		}
+	
+		tv.read(this);
+		this.packet = tv;
 		
 	}
 
 	@Override
 	public void run() {
-		for(TV<ServerConnection> tv : packet.data){
-			tv.run(parent);
-		}
-		packet.data.clear();
+		packet.run(parent);
 	}
 }
