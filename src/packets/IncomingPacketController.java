@@ -7,13 +7,13 @@ import java.util.List;
 import client.PacketListener;
 import net.packet.Packet;
 
-public abstract class IncomingPacketController<TV> implements ReadablePacket{
+public abstract class IncomingPacketController<GenericNetC> implements ReadablePacket{
 	
 	protected byte[] data;
 	protected int position = 2;
 	
-	private List<PacketListener<TV>> listeners = new ArrayList<PacketListener<TV>>();
-	protected Packet<TV> packet;
+	private List<PacketListener<GenericNetC>> listeners = new ArrayList<PacketListener<GenericNetC>>();
+	protected Packet<GenericNetC> packet;
 	
 	public String readString(){
 		int length = readShort();
@@ -65,7 +65,7 @@ public abstract class IncomingPacketController<TV> implements ReadablePacket{
 
 		read();
 		
-		for(PacketListener<TV> l : listeners){
+		for(PacketListener<GenericNetC> l : listeners){
 			l.catchPacket(packet);
 		}
 		
@@ -75,11 +75,11 @@ public abstract class IncomingPacketController<TV> implements ReadablePacket{
 	protected abstract void read();
 	protected abstract void run();
 	
-	public void addPacketListener(PacketListener<TV> pl){
+	public void addPacketListener(PacketListener<GenericNetC> pl){
 		listeners.add(pl);
 	}
 	
-	public void removePacketListener(PacketListener<TV> pl){
+	public void removePacketListener(PacketListener<GenericNetC> pl){
 		listeners.remove(pl);
 	}
 }
